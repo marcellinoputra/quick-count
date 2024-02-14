@@ -104,4 +104,42 @@ export class AuthServiceImpl {
       responseFailedValidation,
     ];
   }
+
+  public async deleteUser(
+    id: number
+  ): Promise<[ResponseModelOnlyMessage, ResponseWhenError]> {
+    let responseModelOnlyMessage = {} as ResponseModelOnlyMessage;
+    let responseWhenError = {} as ResponseWhenError;
+
+    try {
+      await prisma.user
+        .delete({
+          where: {
+            id: Number(id),
+          },
+        })
+        .then((data) => {
+          responseModelOnlyMessage = {
+            status: 200,
+            message: 'Succesfully Delete Account',
+            error: false,
+          };
+        })
+        .catch((err) => {
+          responseWhenError = {
+            status: 400,
+            message: `Failed to Delete Account Because ${err}`,
+            error: true,
+          };
+        });
+    } catch (err) {
+      responseWhenError = {
+        status: 400,
+        message: 'Something Went Wrong',
+        error: true,
+      };
+    }
+
+    return [responseModelOnlyMessage, responseWhenError];
+  }
 }

@@ -73,16 +73,37 @@ export class PemilihServiceImpl {
     return [responseModelOnlyMessage, responseModelWhenError];
   }
 
-  public async createPilihan(
-    pemilihForm: pemilihForm
+  public async updatePilihan(
+    pemilihForm: pemilihForm,
+    id: number
   ): Promise<[ResponseModelOnlyMessage, ResponseWhenError]> {
     let responseModelOnlyMessage = {} as ResponseModelOnlyMessage;
     let responseModelWhenError = {} as ResponseWhenError;
 
     try {
       await prisma.pemilih
+        .update({
+          where: {
+            id: Number(id),
+          },
+          data: {
+            pilihan_user: pemilihForm.pilihan_user,
+            updatedAt: new Date(),
+          },
+        })
+        .then((data) => {
+          responseModelOnlyMessage = {
+            status: 201,
+            message: 'Succesfully Update Pilihan',
+            error: false,
+          };
+        });
     } catch (err) {
-      
+      responseModelWhenError = {
+        status: 400,
+        message: `${err}`,
+        error: true,
+      };
     }
 
     return [responseModelOnlyMessage, responseModelWhenError];

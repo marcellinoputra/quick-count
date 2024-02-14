@@ -63,4 +63,45 @@ export class PemilihController {
       }
     }
   }
+
+  public async updatePilihan(req: Request, res: Response) {
+    const pilihanForm: pemilihForm = {
+      ...req.body,
+    };
+    const { id } = req.params;
+
+    const pilihanService = new PemilihServiceImpl();
+
+    const schema = Joi.object()
+      .keys({
+        pilihan_user: Joi.string().required().messages({
+          'any.required': 'Pilihan User Tidak Boleh Kosong',
+        }),
+      })
+      .unknown(true);
+
+    const { error, value } = schema.validate(req.body);
+
+    if (error != undefined) {
+      return res.status(400).json({
+        status: 400,
+        mesasage: error?.details.map((e) => e.message).join(','),
+        error: true,
+      });
+    } else {
+      const [responseModelOnlyMessage, responseModelWhenError] =
+        await pilihanService.updatePilihan(pilihanForm, Number(id));
+      if (responseModelWhenError.error) {
+        return res.status(responseModelWhenError.status).json({
+          status: responseModelWhenError.status,
+          message: responseModelWhenError.message,
+        });
+      } else {
+        return res.status(responseModelOnlyMessage.status).json({
+          status: responseModelOnlyMessage.status,
+          message: responseModelOnlyMessage.message,
+        });
+      }
+    }
+  }
 }
