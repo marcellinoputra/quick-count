@@ -5,17 +5,23 @@ import multer from 'multer';
 enum PartaiR {
   getPartai = '/v1/partai',
   createPartai = '/v1/partai',
+  updatePartai = '/v1/partai',
 }
 
 export default function PartaiRoutes(
   app: Express,
   partaiController: PartaiController,
-  uploadPartai: multer.Multer
+  upload: multer.Multer
 ) {
   app.get(PartaiR.getPartai, partaiController.getPartai);
   app.post(
     PartaiR.createPartai,
-    partaiController.createPartai,
-    uploadPartai.single('img_partai')
+    upload.single('logo_partai'),
+    partaiController.createPartai
+  );
+  app.put(
+    PartaiR.updatePartai,
+    partaiController.updatePartai
+    // upload.single('logo_partai')
   );
 }

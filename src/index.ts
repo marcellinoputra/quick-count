@@ -10,6 +10,8 @@ const prisma = new PrismaClient();
 
 Routes(app);
 
+app.use('/v1/core/images/partai', express.static('images/partai'));
+
 app.listen(port, () => {
   prisma
     .$connect()

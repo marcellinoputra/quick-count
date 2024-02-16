@@ -25,8 +25,16 @@ export class PartaiController {
   }
 
   public async createPartai(req: Request, res: Response) {
-    const createPartaiForm: PartaiForm = req.body;
+    const reqForm: PartaiForm = {
+      nama_partai: req.body.nama_partai,
+      singkatan_partai: req.body.singkatan_partai,
+      logo_partai: req.file?.filename as string,
+      createdAt: new Date(),
+    };
+
     const partaiService = new PartaiServiceImpl();
+    const [responseModelOnlyMessage, responseWhenError] =
+      await partaiService.createPartai(reqForm);
 
     const schema = Joi.object()
       .keys({
@@ -41,7 +49,7 @@ export class PartaiController {
       })
       .unknown(true);
 
-    const { error, value } = schema.validate(req.body);
+    const { error, value } = schema.validate(reqForm);
 
     if (error != undefined) {
       return res.status(400).json({
@@ -50,12 +58,10 @@ export class PartaiController {
         error: true,
       });
     } else {
-      const [responseModelOnlyMessage, responseModelWhenError] =
-        await partaiService.createPartai(createPartaiForm);
-      if (responseModelWhenError.error) {
-        return res.status(responseModelWhenError.status).json({
-          status: responseModelWhenError.status,
-          message: responseModelWhenError.message,
+      if (responseWhenError.error) {
+        return res.status(responseWhenError.status).json({
+          status: responseWhenError.status,
+          message: responseWhenError.message,
         });
       } else {
         return res.status(responseModelOnlyMessage.status).json({

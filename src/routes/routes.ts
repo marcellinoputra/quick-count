@@ -20,18 +20,18 @@ export default function Routes(app: Express) {
     });
   });
 
-  const uploadPartai = multer({
+  const upload = multer({
     storage: multer.diskStorage({
-      destination(req, file, callback) {
-        callback(null, 'images/partai');
+      destination: function (req, file, cb) {
+        cb(null, 'images/partai');
       },
-      filename(req, file, callback) {
+      filename: function (req, file, cb) {
         const getMonth = new Date().getMonth() + 1;
         const getDay = new Date().getDate();
         const randomString5Length = Math.random().toString(36).substring(2, 15);
 
         const getPathExt = file.originalname.split('.')[1];
-        callback(
+        cb(
           null,
           file.fieldname +
             '_' +
@@ -48,11 +48,11 @@ export default function Routes(app: Express) {
     limits: {
       fileSize: 1024 * 1024 * 5,
     },
-    fileFilter(req, file, callback) {
+    fileFilter: function (req, file, cb) {
       if (!file.originalname.match(/\.(jpg|jpeg|png|gif|webp)$/)) {
-        return callback(new Error('Only Image or Webp Files are allowed!'));
+        return cb(new Error('Only image or webp files are allowed!'));
       }
-      callback(null, true);
+      cb(null, true);
     },
   });
 
@@ -62,5 +62,5 @@ export default function Routes(app: Express) {
 
   AuthRoutes(app, authController);
   PemilihRoutes(app, pemilihController);
-  PartaiRoutes(app, partaiController, uploadPartai);
+  PartaiRoutes(app, partaiController, upload);
 }

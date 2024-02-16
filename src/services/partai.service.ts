@@ -59,8 +59,9 @@ export class PartaiServiceImpl {
       await prisma.partai
         .create({
           data: {
-            singkatan_partai: partaiForm.singkatan_partai,
             nama_partai: partaiForm.nama_partai,
+            singkatan_partai: partaiForm.singkatan_partai,
+            logo_partai: partaiForm.logo_partai,
             createdAt: new Date(),
           },
         })
@@ -70,18 +71,18 @@ export class PartaiServiceImpl {
             message: 'Successfully Create Partai',
             error: false,
           };
-        })
-        .catch((err) => {
-          responseWhenError = {
-            status: 400,
-            message: `${err}`,
-            error: true,
-          };
         });
+      // .catch((err) => {
+      //   responseWhenError = {
+      //     status: 400,
+      //     message: `${err}`,
+      //     error: true,
+      //   };
+      // });
     } catch (err) {
       responseWhenError = {
-        status: 500,
-        message: 'Something Went Wrong',
+        status: 400,
+        message: `${err}`,
         error: true,
       };
     }
