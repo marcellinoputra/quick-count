@@ -20,7 +20,7 @@ export default function Routes(app: Express) {
     });
   });
 
-  const upload = multer({
+  const uploadPartai = multer({
     storage: multer.diskStorage({
       destination(req, file, callback) {
         callback(null, 'images/partai');
@@ -62,5 +62,5 @@ export default function Routes(app: Express) {
 
   AuthRoutes(app, authController);
   PemilihRoutes(app, pemilihController);
-  PartaiRoutes(app, partaiController);
+  PartaiRoutes(app, partaiController, uploadPartai);
 }
