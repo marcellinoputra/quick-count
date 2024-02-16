@@ -70,18 +70,18 @@ export class PartaiServiceImpl {
             message: 'Successfully Create Partai',
             error: false,
           };
+        })
+        .catch((err) => {
+          responseWhenError = {
+            status: 400,
+            message: `${err}`,
+            error: true,
+          };
         });
-      // .catch((err) => {
-      //   responseWhenError = {
-      //     status: 400,
-      //     message: `${err}`,
-      //     error: true,
-      //   };
-      // });
     } catch (err) {
       responseWhenError = {
-        status: 400,
-        message: `${err}`,
+        status: 500,
+        message: `Something Went Wrong`,
         error: true,
       };
     }
