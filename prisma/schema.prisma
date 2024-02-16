@@ -16,10 +16,11 @@ model User {
 }
 
 model Partai {
-  id          Int       @id @default(autoincrement())
-  nama_partai String
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime? @db.Date
+  id               Int       @id @default(autoincrement())
+  nama_partai      String
+  singkatan_partai String    @db.VarChar(255)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime? @db.Date
 }
 
 model Pemilih {
