@@ -15,6 +15,16 @@ model User {
   updatedAt DateTime? @db.Date
 }
 
+model Pemilih {
+  id           Int       @id @default(autoincrement())
+  nama_pemilih String?   @db.VarChar(255)
+  pilihan_user Int?
+  createdAt    DateTime  @default(now()) @db.DateTime(0)
+  updatedAt    DateTime? @db.DateTime(0)
+
+  // partai Partai?
+}
+
 model Partai {
   id               Int       @id @default(autoincrement())
   nama_partai      String    @db.VarChar(255)
@@ -22,12 +32,7 @@ model Partai {
   logo_partai      String    @db.VarChar(255)
   createdAt        DateTime  @default(now())
   updatedAt        DateTime? @db.Date
-}
 
-model Pemilih {
-  id           Int       @id @default(autoincrement())
-  nama_pemilih String?   @db.VarChar(255)
-  pilihan_user String?   @db.VarChar(255)
-  createdAt    DateTime  @default(now()) @db.DateTime(0)
-  updatedAt    DateTime? @db.DateTime(0)
+  // pemilihID Int     @unique
+  // pemilih   Pemilih @relation(fields: [pemilihID], references: [id])
 }

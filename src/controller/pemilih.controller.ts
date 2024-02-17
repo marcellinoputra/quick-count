@@ -74,7 +74,7 @@ export class PemilihController {
 
     const schema = Joi.object()
       .keys({
-        pilihan_user: Joi.string().required().messages({
+        pilihan_user: Joi.number().required().messages({
           'any.required': 'Pilihan User Tidak Boleh Kosong',
         }),
       })

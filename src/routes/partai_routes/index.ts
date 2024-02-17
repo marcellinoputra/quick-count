@@ -21,7 +21,7 @@ export default function PartaiRoutes(
   );
   app.put(
     PartaiR.updatePartai,
+    upload.single('logo_partai'),
     partaiController.updatePartai
-    // upload.single('logo_partai')
   );
 }

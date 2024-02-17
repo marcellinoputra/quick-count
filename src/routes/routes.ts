@@ -8,6 +8,8 @@ import PemilihRoutes from './pemilih_routes';
 import { PartaiController } from '../controller/partai.controller';
 import PartaiRoutes from './partai_routes';
 import multer, { diskStorage } from 'multer';
+import { CountController } from '../controller/count.controller';
+import CountRoutes from './count_routes';
 
 export default function Routes(app: Express) {
   app.use(bodyParser.urlencoded({ extended: true }));
@@ -59,8 +61,10 @@ export default function Routes(app: Express) {
   const authController = new AuthController();
   const pemilihController = new PemilihController();
   const partaiController = new PartaiController();
+  const countController = new CountController();
 
   AuthRoutes(app, authController);
   PemilihRoutes(app, pemilihController);
   PartaiRoutes(app, partaiController, upload);
+  CountRoutes(app, countController);
 }
