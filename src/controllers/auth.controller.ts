@@ -5,6 +5,17 @@ import bcrypt from 'bcrypt';
 import Joi from 'joi';
 
 export class AuthController {
+  /**
+   * POST /v1/signup
+   * @summary Create User
+   * @tags Auth
+   * @param {string} username.form.required - form username - application/x-www-form-urlencoded
+   * @param {string} password.form.required - form password - application/x-www-form-urlencoded
+   * @return {object} 201 - success response - application/json
+   * @return {object} 400 - bad request response
+   * @return {object} 401 - token expired / not found
+   */
+
   public async signUp(req: Request, res: Response) {
     const signUpData: signUpForm = req.body;
     const authService = new AuthServiceImpl();
@@ -50,6 +61,17 @@ export class AuthController {
       }
     }
   }
+
+  /**
+   * POST /v1/signin
+   * @summary Sign In User
+   * @tags Auth
+   * @param {string} username.form.required - form data - application/x-www-form-urlencoded
+   * @param {string} password.form.required - form data - application/x-www-form-urlencoded
+   * @return {object} 200 - success response - application/json
+   * @return {object} 400 - bad request response
+   * @return {object} 401 - token expired / not found
+   */
 
   public async signIn(req: Request, res: Response) {
     const reqForm: signInForm = req.body;

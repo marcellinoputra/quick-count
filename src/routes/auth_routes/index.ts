@@ -1,5 +1,5 @@
 import { Express } from 'express';
-import { AuthController } from '../../controller/auth.controller';
+import { AuthController } from '../../controllers/auth.controller';
 
 enum AuthR {
   SIGNIN = '/v1/signin',

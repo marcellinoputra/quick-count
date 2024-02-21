@@ -1,5 +1,5 @@
 import { Express } from 'express';
-import { PemilihController } from '../../controller/pemilih.controller';
+import { PemilihController } from '../../controllers/pemilih.controller';
 
 enum PemilihR {
   getPemilih = '/v1/pemilih',

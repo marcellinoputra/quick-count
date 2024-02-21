@@ -4,6 +4,16 @@ import { PartaiForm } from '../dto/partai.dto';
 import Joi from 'joi';
 
 export class PartaiController {
+  /**
+   * GET /v1/partai
+   * @summary Get Partai
+   * @tags Partai
+   * @security  BasicAuth | BearerAuth
+   * @return {object} 200 - success response - application/json
+   * @return {object} 400 - bad request response
+   * @return {object} 401 - token expired / not found
+   */
+
   public async getPartai(req: Request, res: Response) {
     const partaiService = new PartaiServiceImpl();
 

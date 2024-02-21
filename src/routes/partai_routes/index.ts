@@ -1,6 +1,7 @@
 import { Express } from 'express';
-import { PartaiController } from '../../controller/partai.controller';
+import { PartaiController } from '../../controllers/partai.controller';
 import multer from 'multer';
+import { middlewareAuth } from '../../middleware/auth';
 
 enum PartaiR {
   getPartai = '/v1/partai',
@@ -11,9 +12,14 @@ enum PartaiR {
 export default function PartaiRoutes(
   app: Express,
   partaiController: PartaiController,
-  upload: multer.Multer
+  upload: multer.Multer,
+  middlewareJwt: middlewareAuth
 ) {
-  app.get(PartaiR.getPartai, partaiController.getPartai);
+  app.get(
+    PartaiR.getPartai,
+    middlewareJwt.authenticationToken,
+    partaiController.getPartai
+  );
   app.post(
     PartaiR.createPartai,
     upload.single('logo_partai'),

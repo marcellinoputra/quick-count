@@ -1,15 +1,16 @@
 import bodyParser from 'body-parser';
 import { Express, Request, Response } from 'express';
 import cors from 'cors';
-import { AuthController } from '../controller/auth.controller';
+import { AuthController } from '../controllers/auth.controller';
 import AuthRoutes from './auth_routes';
-import { PemilihController } from '../controller/pemilih.controller';
+import { PemilihController } from '../controllers/pemilih.controller';
 import PemilihRoutes from './pemilih_routes';
-import { PartaiController } from '../controller/partai.controller';
+import { PartaiController } from '../controllers/partai.controller';
 import PartaiRoutes from './partai_routes';
 import multer, { diskStorage } from 'multer';
-import { CountController } from '../controller/count.controller';
+import { CountController } from '../controllers/count.controller';
 import CountRoutes from './count_routes';
+import { middlewareAuth } from '../middleware/auth';
 
 export default function Routes(app: Express) {
   app.use(bodyParser.urlencoded({ extended: true }));
@@ -62,9 +63,10 @@ export default function Routes(app: Express) {
   const pemilihController = new PemilihController();
   const partaiController = new PartaiController();
   const countController = new CountController();
+  const middlewareJwt = new middlewareAuth();
 
   AuthRoutes(app, authController);
   PemilihRoutes(app, pemilihController);
-  PartaiRoutes(app, partaiController, upload);
+  PartaiRoutes(app, partaiController, upload, middlewareJwt);
   CountRoutes(app, countController);
 }

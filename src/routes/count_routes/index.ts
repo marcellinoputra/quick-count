@@ -1,5 +1,5 @@
 import { Express } from 'express';
-import { CountController } from '../../controller/count.controller';
+import { CountController } from '../../controllers/count.controller';
 
 enum CountR {
   getCount = '/v1/count',
