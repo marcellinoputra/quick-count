@@ -9,7 +9,7 @@ datasource db {
 
 model User {
   id        Int       @id @default(autoincrement())
-  username  String    @db.VarChar(255)
+  username  String    @unique(map: "USERNAME") @db.VarChar(255)
   password  String    @db.VarChar(255)
   createdAt DateTime  @default(now())
   updatedAt DateTime? @db.Date
@@ -21,8 +21,6 @@ model Pemilih {
   pilihan_user Int?
   createdAt    DateTime  @default(now()) @db.DateTime(0)
   updatedAt    DateTime? @db.DateTime(0)
-
-  // partai Partai?
 }
 
 model Partai {
@@ -32,7 +30,4 @@ model Partai {
   logo_partai      String    @db.VarChar(255)
   createdAt        DateTime  @default(now())
   updatedAt        DateTime? @db.Date
-
-  // pemilihID Int     @unique
-  // pemilih   Pemilih @relation(fields: [pemilihID], references: [id])
 }

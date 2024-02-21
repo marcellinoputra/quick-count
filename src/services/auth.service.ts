@@ -18,25 +18,46 @@ export class AuthServiceImpl {
     let responseWhenError = {} as ResponseWhenError;
 
     try {
-      await prisma.user
-        .create({
-          data: {
-            username: signUpForm.username,
-            password: hash,
-          },
-        })
-        .then((data) => {
-          responseModelOnlyMessage = {
-            status: 201,
-            message: 'Successfully Create Account',
-            error: false,
-          };
-        });
+      const checkExisitingUser = await prisma.user.findUnique({
+        where: {
+          username: signUpForm.username,
+        },
+      });
+
+      if (checkExisitingUser) {
+        responseWhenError = {
+          status: 400,
+          message: 'Username Already Exist',
+          error: true,
+        };
+      } else {
+        await prisma.user
+          .create({
+            data: {
+              username: signUpForm.username,
+              password: hash,
+            },
+          })
+          .then(() => {
+            responseModelOnlyMessage = {
+              status: 201,
+              message: 'Successfully Create Account',
+              error: false,
+            };
+          })
+          .catch((err) => {
+            responseWhenError = {
+              status: 400,
+              message: `${err}`,
+              error: true,
+            };
+          });
+      }
     } catch (err) {
       responseWhenError = {
-        status: 400,
+        status: 500,
+        message: `Something Went Wrong`,
         error: true,
-        message: `${err}`,
       };
     }
 
