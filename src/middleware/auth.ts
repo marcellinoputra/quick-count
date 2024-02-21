@@ -11,7 +11,7 @@ export class middlewareAuth {
       });
     }
 
-    jwt.verify(token, 'secret', (err, result) => {
+    jwt.verify(token, `${process.env.JWT_TOKEN_SECRET}`, (err, result) => {
       if (err) {
         return res.status(401).json({
           message: 'User Unauthorized',

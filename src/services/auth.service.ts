@@ -92,7 +92,7 @@ export class AuthServiceImpl {
             username: checkExistingUser.username,
           },
         },
-        'secret',
+        `${process.env.JWT_TOKEN_SECRET}`,
         { expiresIn: '2h' }
       );
 
