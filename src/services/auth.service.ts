@@ -5,12 +5,12 @@ import {
   ResponseWhenError,
 } from '../constant/response_model';
 import { prisma } from '../database/db';
-import { signInForm, signUpForm } from '../dto/auth.dto';
+import { signInForm, signUpForm, updateAccountForm } from '../dto/auth.dto';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 export class AuthServiceImpl {
-  public async signUp(
+  public async SignUp(
     signUpForm: signUpForm,
     hash: string
   ): Promise<[ResponseModelOnlyMessage, ResponseWhenError]> {
@@ -64,7 +64,7 @@ export class AuthServiceImpl {
     return [responseModelOnlyMessage, responseWhenError];
   }
 
-  public async signIn(
+  public async SignIn(
     signInForm: signInForm
   ): Promise<
     [ResponseModelWithToken, ResponseWhenError, ResponseFailedValidation]
@@ -126,7 +126,66 @@ export class AuthServiceImpl {
     ];
   }
 
-  public async deleteUser(
+  public async UpdateAccount(
+    UpdateForm: updateAccountForm,
+    id: number,
+    hash: string
+  ): Promise<[ResponseModelOnlyMessage, ResponseWhenError]> {
+    let responseModelOnlyMessage = {} as ResponseModelOnlyMessage;
+    let responseWhenError = {} as ResponseWhenError;
+
+    try {
+      const checkExistingUser = await prisma.user.findUnique({
+        where: {
+          username: UpdateForm.username,
+        },
+      });
+
+      if (checkExistingUser) {
+        responseWhenError = {
+          status: 400,
+          message: 'Username Already Exist',
+          error: true,
+        };
+      } else {
+        await prisma.user
+          .update({
+            where: {
+              id: Number(id),
+            },
+            data: {
+              username: UpdateForm.username,
+              password: hash,
+              updatedAt: new Date(),
+            },
+          })
+          .then(() => {
+            responseModelOnlyMessage = {
+              status: 200,
+              message: 'Successfully Update Account',
+              error: false,
+            };
+          })
+          .catch((err) => {
+            responseWhenError = {
+              status: 400,
+              message: `${err}`,
+              error: true,
+            };
+          });
+      }
+    } catch (err) {
+      responseWhenError = {
+        status: 500,
+        message: 'Something Went Wrong',
+        error: true,
+      };
+    }
+
+    return [responseModelOnlyMessage, responseWhenError];
+  }
+
+  public async DeleteAccount(
     id: number
   ): Promise<[ResponseModelOnlyMessage, ResponseWhenError]> {
     let responseModelOnlyMessage = {} as ResponseModelOnlyMessage;

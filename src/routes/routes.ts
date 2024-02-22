@@ -65,7 +65,7 @@ export default function Routes(app: Express) {
   const countController = new CountController();
   const middlewareJwt = new middlewareAuth();
 
-  AuthRoutes(app, authController);
+  AuthRoutes(app, authController, middlewareJwt);
   PemilihRoutes(app, pemilihController);
   PartaiRoutes(app, partaiController, upload, middlewareJwt);
   CountRoutes(app, countController);

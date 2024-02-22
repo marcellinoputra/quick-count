@@ -34,6 +34,18 @@ export class PartaiController {
     }
   }
 
+  /**
+   * POST /v1/partai
+   * @summary Create Partai
+   * @tags Partai
+   * @param {string} nama_partai.form.required - form data - multipart/form-data
+   * @param {string} singkatan_partai.form.required - form data - multipart/form-data
+   * @param {file} logo_partai.form.required - file - multipart/form-data
+   * @return {object} 200 - success response - application/json
+   * @return {object} 400 - bad request response
+   * @return {object} 401 - token expired / not found
+   */
+
   public async createPartai(req: Request, res: Response) {
     const reqForm: PartaiForm = {
       nama_partai: req.body.nama_partai,
@@ -82,6 +94,19 @@ export class PartaiController {
     }
   }
 
+  /**
+   * PUT /v1/partai/{id}
+   * @summary Update Partai
+   * @tags Partai
+   * @param {number} id.path
+   * @param {string} nama_partai.form.required - form data - multipart/form-data
+   * @param {string} singkatan_partai.form.required - form data - multipart/form-data
+   * @param {file} logo_partai.form.required - file - multipart/form-data
+   * @return {object} 200 - success response - application/json
+   * @return {object} 400 - bad request response
+   * @return {object} 401 - token expired / not found
+   */
+
   public async updatePartai(req: Request, res: Response) {
     const updateForm: PartaiForm = {
       ...req.body,
@@ -114,7 +139,7 @@ export class PartaiController {
       });
     } else {
       const [responseModelOnlyMessage, responseWhenError] =
-        await partaiService.updatePartai(req.body, Number(id));
+        await partaiService.updatePartai(updateForm, Number(id));
       if (responseWhenError.error) {
         res.status(responseWhenError.status).json({
           status: responseWhenError.status,

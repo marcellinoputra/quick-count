@@ -13,3 +13,11 @@ export interface signUpForm {
   createdAt?: Date;
   updatedAt?: Date | null;
 }
+
+export interface updateAccountForm {
+  id?: number;
+  username: string;
+  password: string;
+  createdAt?: Date | null;
+  updatedAt?: Date | null;
+}

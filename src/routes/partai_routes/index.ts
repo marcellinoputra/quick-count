@@ -17,17 +17,19 @@ export default function PartaiRoutes(
 ) {
   app.get(
     PartaiR.getPartai,
-    middlewareJwt.authenticationToken,
-    partaiController.getPartai
+    partaiController.getPartai,
+    middlewareJwt.authenticationToken
   );
   app.post(
     PartaiR.createPartai,
     upload.single('logo_partai'),
-    partaiController.createPartai
+    partaiController.createPartai,
+    middlewareJwt.authenticationToken
   );
   app.put(
     PartaiR.updatePartai,
     upload.single('logo_partai'),
-    partaiController.updatePartai
+    partaiController.updatePartai,
+    middlewareJwt.authenticationToken
   );
 }
