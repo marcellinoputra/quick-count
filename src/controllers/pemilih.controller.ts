@@ -3,10 +3,20 @@ import { PemilihServiceImpl } from '../services/pemilih.service';
 import { pemilihForm } from '../dto/pemilih.dto';
 import Joi from 'joi';
 
-export class PemilihController {
-  public async getPemilih(req: Request, res: Response) {
-    const pemilihService = new PemilihServiceImpl();
+const pemilihService = new PemilihServiceImpl();
 
+export class PemilihController {
+  /**
+   * GET /v1/pemilih
+   * @summary Get Data Pemilih
+   * @tags Pemilih
+   * @security BasicAuth | BearerAuth
+   * @return {object} 200 - success response - application/json
+   * @return {object} 400 - bad request response
+   * @return {object} 401 - token expired / not found
+   */
+
+  public async getPemilih(req: Request, res: Response) {
     const [responseModelWithData, responseModelWhenError] =
       await pemilihService.getPemilih();
 
@@ -24,11 +34,20 @@ export class PemilihController {
     }
   }
 
+  /**
+   * POST /v1/pemilih
+   * @summary Create Pemilih
+   * @tags Pemilih
+   * @param {string} nama_pemilih.form.required - form data - application/x-www-url-encoded
+   * @return {object} 200 - success response - application/json
+   * @return {object} 400 - bad request response
+   * @return {object} 401 - token expired / not found
+   */
+
   public async createPemilih(req: Request, res: Response) {
     const pemilihData: pemilihForm = {
       ...req.body,
     };
-    const pemilihService = new PemilihServiceImpl();
 
     const schema = Joi.object()
       .keys({
@@ -64,13 +83,22 @@ export class PemilihController {
     }
   }
 
+  /**
+   * PUT /v1/pemilih/{id}
+   * @summary Update Pilihan User
+   * @tags Pemilih
+   * @param {number} id.path
+   * @param {string} pilihan_user.form.required - form data - application/x-www-form-urlencoded
+   * @return {object} 200 - success response - application/json
+   * @return {object} 400 - bad request response
+   * @return {object} 401 - token expired / not found
+   */
+
   public async updatePilihan(req: Request, res: Response) {
     const pilihanForm: pemilihForm = {
       ...req.body,
     };
     const { id } = req.params;
-
-    const pilihanService = new PemilihServiceImpl();
 
     const schema = Joi.object()
       .keys({
@@ -90,7 +118,7 @@ export class PemilihController {
       });
     } else {
       const [responseModelOnlyMessage, responseModelWhenError] =
-        await pilihanService.updatePilihan(pilihanForm, Number(id));
+        await pemilihService.updatePilihan(pilihanForm, Number(id));
       if (responseModelWhenError.error) {
         return res.status(responseModelWhenError.status).json({
           status: responseModelWhenError.status,

@@ -3,7 +3,11 @@ import { PartaiServiceImpl } from '../services/partai.service';
 import { PartaiForm } from '../dto/partai.dto';
 import Joi from 'joi';
 
+const partaiService = new PartaiServiceImpl();
+
 export class PartaiController {
+  // partaiService = new PartaiServiceImpl();
+
   /**
    * GET /v1/partai
    * @summary Get Partai
@@ -15,7 +19,7 @@ export class PartaiController {
    */
 
   public async getPartai(req: Request, res: Response) {
-    const partaiService = new PartaiServiceImpl();
+    // const partaiService = new PartaiServiceImpl();
 
     const [responseModelWithData, responseModelWhenError] =
       await partaiService.getPartai();
@@ -54,7 +58,6 @@ export class PartaiController {
       createdAt: new Date(),
     };
 
-    const partaiService = new PartaiServiceImpl();
     const [responseModelOnlyMessage, responseWhenError] =
       await partaiService.createPartai(reqForm);
 
@@ -114,8 +117,6 @@ export class PartaiController {
 
     const { id } = req.params;
 
-    const partaiService = new PartaiServiceImpl();
-
     const schema = Joi.object()
       .keys({
         singkatan_partai: Joi.string().min(3).required().messages({
@@ -151,6 +152,31 @@ export class PartaiController {
           message: responseModelOnlyMessage.message,
         });
       }
+    }
+  }
+
+  /**
+   * DELETE /v1/partai/{id}
+   * @summary Delete Partai
+   * @tags Partai
+   * @param {number} id.path
+   * @return {object} 200 - success response - application/json
+   * @return {object} 400 - bad request response
+   * @return {object} 401 - token expired / not found
+   */
+
+  public async DeletePartai(req: Request, res: Response) {
+    const { id } = req.params;
+
+    const [responseModelOnlyMessage, responseWhenError] =
+      await partaiService.DeletePartai(Number(id));
+
+    if (responseWhenError.error) {
+      return res.status(responseWhenError.status).json(responseWhenError);
+    } else {
+      return res
+        .status(responseModelOnlyMessage.status)
+        .json(responseModelOnlyMessage);
     }
   }
 }

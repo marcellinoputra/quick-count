@@ -4,6 +4,8 @@ import { AuthServiceImpl } from '../services/auth.service';
 import bcrypt from 'bcrypt';
 import Joi from 'joi';
 
+const authService = new AuthServiceImpl();
+
 export class AuthController {
   /**
    * POST /v1/signup
@@ -18,7 +20,6 @@ export class AuthController {
 
   public async signUp(req: Request, res: Response) {
     const signUpData: signUpForm = req.body;
-    const authService = new AuthServiceImpl();
 
     const schema = Joi.object()
       .keys({
@@ -89,8 +90,6 @@ export class AuthController {
       })
       .unknown(true);
 
-    const authService = new AuthServiceImpl();
-
     const { error, value } = schema.validate(req.body);
     if (error != undefined) {
       return res.status(400).json({
@@ -151,7 +150,6 @@ export class AuthController {
     const salt = bcrypt.genSaltSync(saltRounds);
     const hash = bcrypt.hashSync(updateForm.password, salt);
 
-    const authService = new AuthServiceImpl();
     const { error, value } = schema.validate(req.body);
     if (error != undefined) {
       return res.status(400).json({
@@ -184,8 +182,6 @@ export class AuthController {
 
   public async DeleteUser(req: Request, res: Response) {
     const { id } = req.params;
-
-    const authService = new AuthServiceImpl();
 
     const [responseModelOnlyMessage, responseWhenError] =
       await authService.DeleteAccount(Number(id));

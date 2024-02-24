@@ -131,4 +131,42 @@ export class PartaiServiceImpl {
     }
     return [responseModelOnlyMessage, responseWhenError];
   }
+
+  public async DeletePartai(
+    id: number
+  ): Promise<[ResponseModelOnlyMessage, ResponseWhenError]> {
+    let responseModelOnlyMessage = {} as ResponseModelOnlyMessage;
+    let responseWhenError = {} as ResponseWhenError;
+
+    try {
+      await prisma.partai
+        .delete({
+          where: {
+            id: id,
+          },
+        })
+        .then(() => {
+          responseModelOnlyMessage = {
+            status: 200,
+            message: 'Successfully Delete Message',
+            error: false,
+          };
+        })
+        .catch((err) => {
+          responseWhenError = {
+            status: 400,
+            message: `${err}`,
+            error: true,
+          };
+        });
+    } catch (err) {
+      responseWhenError = {
+        status: 500,
+        message: 'Something Went Wrong',
+        error: true,
+      };
+    }
+
+    return [responseModelOnlyMessage, responseWhenError];
+  }
 }
